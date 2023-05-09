@@ -6,7 +6,7 @@ use ode_solver::rk4;
 
 
 fn main() {
-    let f = |x: Array1<f64>| {
+    let f = |_t: f64, x: &Array1<f64>| {
         let mut dxdt = Array::zeros(x.len());
         dxdt[0] = 2.0 * x[0];
         dxdt
@@ -14,7 +14,7 @@ fn main() {
 
     let x: Array1<f64> = Array1::from_vec(vec![1.0 / 4.0,]);
 
-    let (points, t) = rk4::rk4(64, [0.0, 2.0], x, &f);
+    let (points, t) = rk4::rk4(64, [0.0, 2.0], &x, &f);
 
     println!("{}", points.last().unwrap());
 

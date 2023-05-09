@@ -3,17 +3,19 @@
 use plotters::prelude::*;
 use ndarray::prelude::*;
 use ode_solver::ode45;
+use ode_solver::rk4;
 
 fn f(t: f64, y: &Array1<f64>) -> Array1<f64> {
     let mut ret = Array::<f64,_>::zeros(y.len());
     ret[0] = y[0] * (2.0 - t) * t + t - 1.0;
+    //ret[0] = -2.0 * y[0];
     ret
 }
 
 fn main() {
     let y0 = arr1(&[1.0]);
 
-    let (times, points) = ode45::ode45(f, [0.0, 5.0], &y0, 0.1, 1e-6);
+    let (times, points) = ode45::ode45(f, [0.0, 5.0], &y0, 1e-6);
 
     println!("{:?}", times);
 
@@ -29,7 +31,7 @@ fn main() {
         .x_label_area_size((5).percent_height())
         .margin((1).percent())
         //.build_cartesian_2d((-WIDTH as f32 + X_OFFSET)..(WIDTH as f32 + X_OFFSET) as f32, (-HEIGHT as f32)..(HEIGHT as f32))
-        .build_cartesian_2d(0.0..5.0, 0.0..3.0)
+        .build_cartesian_2d(0.0..5.0, 0.0..4.0)
         .unwrap();
     plot.configure_mesh()
         .draw()
@@ -41,8 +43,20 @@ fn main() {
                 .into_iter()
                 .zip(times.iter())
                 .map(|(p, t)| (*t, p[0])),
-            BLUE.stroke_width(2),
+            BLUE.stroke_width(3),
         ).point_size(2)
+    )
+    .unwrap();
+
+    let (points, times) = rk4::rk4(64, [0.0, 5.0], &y0, f);
+    plot.draw_series(
+        LineSeries::new(
+            points
+                .into_iter()
+                .zip(times.iter())
+                .map(|(p, t)| (*t, p[0])),
+            GREEN.stroke_width(2),
+        )
     )
     .unwrap();
 
