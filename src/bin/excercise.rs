@@ -4,15 +4,15 @@ use plotters::prelude::*;
 use ndarray::prelude::*;
 use ode_solver::ode45;
 
-const ALPHA: f64 = 0.20;
+const ALPHA: f64 = 0.10;
 
 // Time series
-const YMIN: f64 = -2.0;
-const YMAX: f64 = 4.0;
+const YMIN: f64 = -6.0;
+const YMAX: f64 = 6.0;
 
 // Phase plot
-const XMIN_PHASE: f64 = -2.0;
-const XMAX_PHASE: f64 = 4.0;
+const XMIN_PHASE: f64 = -6.0;
+const XMAX_PHASE: f64 = 6.0;
 
 fn f(_t: f64, xyz: &Array1<f64>) -> Array1<f64> {
     let mut dxdydz = Array::<f64,_>::zeros(xyz.len());
