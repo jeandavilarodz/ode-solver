@@ -1,4 +1,4 @@
-// excercise.rs
+// 3d_system.rs
 
 use plotters::prelude::*;
 use ndarray::prelude::*;
